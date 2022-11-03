@@ -9,7 +9,7 @@
 import Quick
 import Nimble
 
-@testable import Places
+@testable import Landmarks
 
 class LandmarksInteractorTests: QuickSpec {
     override func spec() {

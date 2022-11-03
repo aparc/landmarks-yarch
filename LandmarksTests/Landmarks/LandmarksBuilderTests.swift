@@ -11,7 +11,7 @@
 import Quick
 import Nimble
 
-@testable import Places
+@testable import Landmarks
 
 class LandmarksBuilderTests: QuickSpec {
     override func spec() {

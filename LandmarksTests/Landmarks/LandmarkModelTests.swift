@@ -5,7 +5,7 @@
 import Quick
 import Nimble
 
-@testable import Places
+@testable import Landmarks
 
 class LandmarkModelTests: QuickSpec {
     override func spec() {

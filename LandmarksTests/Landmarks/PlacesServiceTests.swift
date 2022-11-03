@@ -8,7 +8,7 @@
 import Quick
 import Nimble
 
-@testable import Places
+@testable import Landmarks
 
 class PlacesServiceTests: QuickSpec {
     override func spec() {
