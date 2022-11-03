@@ -33,6 +33,6 @@ enum LandmarksDataFlow {
     }
 
     enum LandmarksError: Error {
-        case someError(message: String)
+        case fetchError(message: String)
     }
 }

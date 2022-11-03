@@ -10,7 +10,7 @@ import UIKit
 extension LandmarkCell {
     struct Appearance {
         let labelFontSize: CGFloat = 24
-        let imageViewTintColor: UIColor = .systemOrange
+        let imageViewTintColor: UIColor = .init(red: 247/255, green: 205/255, blue: 70/255, alpha: 1)
         let landmarkImageEdgeInsets = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 0)
         let labelLeftOffset: CGFloat = 8
         let favoriteIconHeight: CGFloat = 30

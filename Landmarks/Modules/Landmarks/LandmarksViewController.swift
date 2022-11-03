@@ -15,8 +15,10 @@ protocol LandmarksViewControllerDelegate: AnyObject {
 
 class LandmarksViewController: UIViewController {
     
-    // MARK: - Private Properties
+    // MARK: - Public Properties
     let interactor: LandmarksBusinessLogic
+    
+    // MARK: - Private Properties
     private var state: LandmarksDataFlow.ViewControllerState
     
     private let landmarksTableDataSource: LandmarksTableDataSource = LandmarksTableDataSource()

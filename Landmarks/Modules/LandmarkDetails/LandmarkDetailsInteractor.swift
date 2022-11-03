@@ -23,7 +23,7 @@ class LandmarkDetailsInteractor: LandmarkDetailsBusinessLogic {
             if let landmark = landmark {
                 result = .success(landmark)
             } else {
-                result = .failure(.someError(message: "No Data"))
+                result = .failure(.fetchError(message: "No Data"))
             }
             
             self.presenter.presentLandmarkDetails(response: LandmarkDetailsDataFlow.FetchLandmarkDetails.Response(result: result))

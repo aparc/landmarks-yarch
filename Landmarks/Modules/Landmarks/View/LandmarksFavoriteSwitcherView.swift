@@ -14,6 +14,7 @@ protocol LandmarksFavoriteSwitcherDelegate: AnyObject {
 extension LandmarksFavoriteSwitcherView {
     struct Appearance {
         let labelInset: CGFloat = 16
+        
         let toggleRightOffset: CGFloat = -16
         
         let borderThickness: CGFloat = 1

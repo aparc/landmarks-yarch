@@ -4,7 +4,7 @@
 
 import CoreLocation
 
-struct LandmarkModel: Identifiable, Hashable, Codable {
+struct LandmarkModel: Codable {
     
     let id: Int
     let name: String

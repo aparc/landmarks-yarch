@@ -7,7 +7,7 @@
 
 import MapKit
 
-struct LandmarkDetailsViewModel: Identifiable {
+struct LandmarkDetailsViewModel {
     let id: Int
     let name: String
     let park: String

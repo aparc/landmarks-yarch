@@ -59,7 +59,7 @@ extension LandmarksPresenterTests {
     enum TestData {
         static let successEmptyResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .success([]))
         static let successResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .success([LandmarkModel(id: 1, name: "", city: "", state: "", park: "", imageName: "", coordinates: .init(latitude: 213.12, longitude: 421.12), isFavorite: false)]))
-        static let failureResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .failure(.someError(message: "some error")))
+        static let failureResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .failure(.fetchError(message: "some error")))
     }
 }
 

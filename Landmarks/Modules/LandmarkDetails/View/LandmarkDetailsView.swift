@@ -8,7 +8,7 @@ extension LandmarkDetailsView {
     struct Appearance {
         let backgroundColor: UIColor = .white
         
-        let favoriteIconColor: UIColor = .init(red: 247/255, green: 205/255, blue: 70/255, alpha: 1.0 )
+        let favoriteIconColor: UIColor = .init(red: 247/255, green: 205/255, blue: 70/255, alpha: 1)
         let favoriteIconWidth: CGFloat = 28
         let leftFavoriteIconOffset: CGFloat = 20
         

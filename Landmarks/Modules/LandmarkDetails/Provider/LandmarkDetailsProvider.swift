@@ -7,14 +7,12 @@ protocol LandmarkDetailsProviderProtocol {
 }
 
 struct LandmarkDetailsProvider: LandmarkDetailsProviderProtocol {
-    let dataStore: LandmarksDataStore
-
-    init(dataStore: LandmarksDataStore = .shared) {
-        self.dataStore = dataStore
-    }
+    
+    let dataStore: LandmarksDataStore = .shared
 
     func getLandmarkDetails(by id: Int, completion: @escaping (LandmarkDetailsModel?) -> Void) {
         let landmark = dataStore.models?.first { $0.id == id }
         completion(landmark)
     }
+    
 }

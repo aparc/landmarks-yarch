@@ -10,4 +10,5 @@ class LandmarksDataStore {
     var models: [LandmarkModel]?
     
     private init() {}
+    
 }

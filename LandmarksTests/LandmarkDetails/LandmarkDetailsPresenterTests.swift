@@ -61,7 +61,7 @@ extension LandmarkDetailsPresenterTests {
                 )
             )
         )
-        static let failureResponse = LandmarkDetailsDataFlow.FetchLandmarkDetails.Response(result: .failure(.someError(message: "some error")))
+        static let failureResponse = LandmarkDetailsDataFlow.FetchLandmarkDetails.Response(result: .failure(.fetchError(message: "some error")))
     }
 }
 

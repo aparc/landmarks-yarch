@@ -26,9 +26,9 @@ class LandmarksInteractor: LandmarksBusinessLogic {
                 
                 result = .success(landmarks)
             } else if let error = error {
-                result = .failure(.someError(message: error.localizedDescription))
+                result = .failure(.fetchError(message: error.localizedDescription))
             } else {
-                result = .failure(.someError(message: "No Data"))
+                result = .failure(.fetchError(message: "No Data"))
             }
             self.presenter.presentLandmarks(response: LandmarksDataFlow.FetchLandmarks.Response(result: result))
         }
