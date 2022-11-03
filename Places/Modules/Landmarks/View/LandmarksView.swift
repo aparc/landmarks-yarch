@@ -5,15 +5,33 @@
 import UIKit
 import SnapKit
 
+extension LandmarksView {
+    struct Appearance {
+        let backgroundColor: UIColor = .white
+        let switcherViewHeight: CGFloat = 60
+    }
+}
+
 class LandmarksView: UIView {
     
     // MARK: - Private Properties
+    private let appearance = Appearance()
+    
     private var tableView: UITableView
     
-    private lazy var customView: UIView = {
+    private lazy var containerView: UIView = {
         let view = UIView()
+        view.backgroundColor = appearance.backgroundColor
         return view
     }()
+    
+    private lazy var tableBackgroundView: UIView = UIView()
+    
+    private lazy var landmarkSwitcherView = LandmarksFavoriteSwitcherView()
+    
+    private lazy var emptyView = LandmarksEmptyView()
+    
+    private lazy var errorView = LandmarkErrorView()
     
     private lazy var spinnerView: UIActivityIndicatorView = {
         let activityIndicator = UIActivityIndicatorView()
@@ -28,15 +46,20 @@ class LandmarksView: UIView {
     init(
         frame: CGRect = CGRect.zero,
         tableDataSource: UITableViewDataSource,
-        tableDelegate: UITableViewDelegate
+        tableDelegate: UITableViewDelegate,
+        favoriteSwitcherdelegate: LandmarksFavoriteSwitcherDelegate
     ) {
         tableView = UITableView()
         super.init(frame: frame)
-        configureTableView()
+        
+        landmarkSwitcherView.delegate = favoriteSwitcherdelegate
+        configureTableView(dataSource: tableDataSource, delegate: tableDelegate)
         addSubviews()
         makeConstraints()
         
-        tableView.isHidden = true
+        spinnerView.isHidden = true
+        emptyView.isHidden = true
+        errorView.isHidden = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -44,32 +67,35 @@ class LandmarksView: UIView {
     }
     
     // MARK: - Public Methods
-    func updateTableData(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
+    func updateTableData() {
         showTable()
-        tableView.dataSource = dataSource
-        tableView.delegate = delegate
         tableView.reloadData()
     }
     
+    func showEmptyView() {
+        updateTableData()
+        showInTableBackground(view: emptyView)
+    }
+    
+    func showLoading() {
+        showTable()
+        showInTableBackground(view: spinnerView)
+    }
+    
+    func showError(message: String) {
+        errorView.title.text = message
+        show(view: errorView)
+    }
+    
     // MARK: - Private Methods
-    private func configureTableView() {
+    private func configureTableView(dataSource: UITableViewDataSource, delegate: UITableViewDelegate) {
+        landmarkSwitcherView.frame = CGRect(x: 0, y: 0, width: bounds.width, height: appearance.switcherViewHeight)
+        tableView.tableHeaderView = landmarkSwitcherView
+        tableView.backgroundView = tableBackgroundView
         tableView.register(LandmarkCell.self, forCellReuseIdentifier: LandmarkCell.reuseIdentifier)
-        tableView.register(LandmarksFavoriteSwitcherCell.self, forCellReuseIdentifier: LandmarksFavoriteSwitcherCell.reuseIdentifier)
-    }
-    
-    private func showEmptyView(title: String, subtitle: String) {
-        //        show(view: emptyView)
-        //        emptyView.title.text = title
-        //        emptyView.subtitle.text = subtitle
-    }
-    
-    private func showLoading() {
-        show(view: spinnerView)
-    }
-    
-    private func showError(message: String) {
-        //        show(view: errorView)
-        //        errorView.title.text = message
+        tableView.dataSource = dataSource
+        tableView.delegate = delegate
+        updateTableData()
     }
     
     private func showTable() {
@@ -80,14 +106,34 @@ class LandmarksView: UIView {
         subviews.forEach { $0.isHidden = $0 != view }
     }
     
-    private func addSubviews(){
-        addSubview(tableView)
-        addSubview(spinnerView)
+    private func showInTableBackground(view: UIView) {
+        tableBackgroundView.subviews.forEach { $0.isHidden = $0 != view }
     }
     
+    private func addSubviews(){
+        tableBackgroundView.addSubview(spinnerView)
+        tableBackgroundView.addSubview(emptyView)
+        
+        addSubview(tableView)
+        addSubview(errorView)
+    }
+    
+    // MARK: - Layout
     private func makeConstraints() {
         tableView.snp.makeConstraints { make in
-            make.left.top.bottom.right.equalToSuperview()
+            make.edges.equalToSuperview()
+        }
+        
+        emptyView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        spinnerView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+        }
+        
+        errorView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
     }
 }

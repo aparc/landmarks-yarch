@@ -22,13 +22,12 @@ class LandmarksTableDelegate: NSObject, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         defer { tableView.deselectRow(at: indexPath, animated: true) }
         
-        guard indexPath.section == 1 else { return }
         guard let viewModel = representableViewModels[safe: indexPath.row] else { return }
-        delegate?.openPlaceDetails(with: viewModel.id)
+        delegate?.openLandmarkDetails(with: viewModel.id)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.section == 0 ? 60 : 80
+        80
     }
     
 }

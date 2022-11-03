@@ -7,7 +7,7 @@ import Nimble
 
 @testable import Places
 
-class PlacesModelTests: QuickSpec {
+class LandmarkModelTests: QuickSpec {
     override func spec() {
         describe("equalit operator") {
             it("should return true for same objects"){
@@ -25,19 +25,17 @@ class PlacesModelTests: QuickSpec {
     }
 }
 
-extension PlacesModelTests {
+extension LandmarkModelTests {
     enum TestData {
-        static let uid = UUID().uuidString
-        static let name = "Name"
-        static let model = LandmarkModel(uid: uid, name: name)
-        static let differentUidModel = LandmarkModel(uid: UUID().uuidString, name: name)
-        static let differentNameModel = LandmarkModel(uid: uid, name: "differentName")
+        static let model = LandmarkModel(id: 1, name: "name", city: "city", state: "state", park: "park", imageName: "image", coordinates: .init(latitude: 121.12, longitude: 121.12), isFavorite: true)
+        static let differentUidModel = LandmarkModel(id: 2, name: "name", city: "city", state: "state", park: "park", imageName: "image", coordinates: .init(latitude: 121.12, longitude: 121.12), isFavorite: true)
+        static let differentNameModel = LandmarkModel(id: 1, name: "name2", city: "city", state: "state", park: "park", imageName: "image", coordinates: .init(latitude: 121.12, longitude: 121.12), isFavorite: true)
 
         static let defaultEntitiesCollectionCount = 1
         static func entitiesCollection(withCount count: Int = defaultEntitiesCollectionCount) -> [LandmarkModel] {
             var collection: [LandmarkModel] = []
             while collection.count < count {
-                collection.append(LandmarkModel(uid: UUID().uuidString, name: "name"))
+                collection.append(LandmarkModel(id: 4, name: "qwe", city: "qwe", state: "qwe", park: "qwe", imageName: "qwe", coordinates: .init(latitude: 123.42, longitude: 435.34), isFavorite: true))
             }
             return collection
         }

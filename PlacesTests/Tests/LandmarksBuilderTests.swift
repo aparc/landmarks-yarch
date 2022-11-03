@@ -13,7 +13,7 @@ import Nimble
 
 @testable import Places
 
-class PlacesBuilderTests: QuickSpec {
+class LandmarksBuilderTests: QuickSpec {
     override func spec() {
         var builder: LandmarksBuilder!
 
@@ -24,7 +24,7 @@ class PlacesBuilderTests: QuickSpec {
         describe(".build") {
             it("should build module parts") {
                 // when
-                let controller = builder.set(initialState: TestData.initialState).build() as? LandmarksViewController
+                let controller = builder.build() as? LandmarksViewController
                 let interactor = await controller?.interactor as? LandmarksInteractor
                 let presenter = interactor?.presenter as? LandmarksPresenter
 
@@ -36,7 +36,7 @@ class PlacesBuilderTests: QuickSpec {
 
             it("should set dependencies between module parts") {
                 // when
-                let controller = builder.set(initialState: TestData.initialState).build() as? LandmarksViewController
+                let controller = builder.build() as? LandmarksViewController
                 let interactor = await controller?.interactor as? LandmarksInteractor
                 let presenter = interactor?.presenter as? LandmarksPresenter
 
@@ -47,8 +47,8 @@ class PlacesBuilderTests: QuickSpec {
     }
 }
 
-extension PlacesBuilderTests {
+extension LandmarksBuilderTests {
     enum TestData {
-        static let initialState = Landmarks.ViewControllerState.loading
+        static let initialState = LandmarksDataFlow.ViewControllerState.loading
     }
 }

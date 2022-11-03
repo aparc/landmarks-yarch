@@ -3,7 +3,7 @@
 //  Created by Andrei on 01/11/2022.
 //
 
-enum Landmarks {
+enum LandmarksDataFlow {
     
     // MARK: - Use cases
     enum FetchLandmarks {
@@ -26,7 +26,7 @@ enum Landmarks {
     }
 
     enum ViewControllerState {
-        case loading
+        case loading(onlyFavorites: Bool)
         case result([LandmarksViewModel])
         case emptyResult
         case error(message: String)

@@ -10,7 +10,7 @@ import Nimble
 
 @testable import Places
 
-class PlacesPresenterTests: QuickSpec {
+class LandmarksPresenterTests: QuickSpec {
     override func spec() {
         var presenter: LandmarksPresenter!
         var viewControllerMock: PlacesViewControllerMock!
@@ -25,9 +25,9 @@ class PlacesPresenterTests: QuickSpec {
             context("successfull empty result") {
                 it ("should prepare empty view model and display it in view") {
                     // when
-                    presenter.presentSomething(response: TestData.successEmptyResponse)
+                    presenter.presentLandmarks(response: TestData.successEmptyResponse)
                     // then
-                    expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
+                    await expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
                     expect{ if case .emptyResult? = viewControllerMock.displaySomethingArguments?.state { return true }; return false }.to(beTrue())
                 }
             }
@@ -35,9 +35,9 @@ class PlacesPresenterTests: QuickSpec {
             context("successfull result") {
                 it ("should prepare result view model and display it in view") {
                     // when
-                    presenter.presentSomething(response: TestData.successResponse)
+                    presenter.presentLandmarks(response: TestData.successResponse)
                     // then
-                    expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
+                    await expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
                     expect{ if case .result(_)? = viewControllerMock.displaySomethingArguments?.state { return true }; return false }.to(beTrue())
                 }
             }
@@ -45,9 +45,9 @@ class PlacesPresenterTests: QuickSpec {
             context("failure result") {
                 it ("should prepare error view model and display it in view") {
                     // when
-                    presenter.presentSomething(response: TestData.failureResponse)
+                    presenter.presentLandmarks(response: TestData.failureResponse)
                     // then
-                    expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
+                    await expect(viewControllerMock.displaySomethingWasCalled).to(beTruthy())
                     expect{ if case .error(_)? = viewControllerMock.displaySomethingArguments?.state { return true }; return false }.to(beTrue())
                 }
             }
@@ -55,19 +55,19 @@ class PlacesPresenterTests: QuickSpec {
     }
 }
 
-extension PlacesPresenterTests {
+extension LandmarksPresenterTests {
     enum TestData {
-        static let successEmptyResponse = Landmarks.FetchLandmarks.Response(result: .success([]))
-        static let successResponse = Landmarks.FetchLandmarks.Response(result: .success([LandmarkModel(uid: UUID().uuidString, name: "name")]))
-        static let failureResponse = Landmarks.FetchLandmarks.Response(result: .failure(.someError(message: "some error")))
+        static let successEmptyResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .success([]))
+        static let successResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .success([LandmarkModel(id: 1, name: "", city: "", state: "", park: "", imageName: "", coordinates: .init(latitude: 213.12, longitude: 421.12), isFavorite: false)]))
+        static let failureResponse = LandmarksDataFlow.FetchLandmarks.Response(result: .failure(.someError(message: "some error")))
     }
 }
 
 fileprivate class PlacesViewControllerMock: LandmarksDisplayLogic {
     var displaySomethingWasCalled: Int = 0
-    var displaySomethingArguments: Landmarks.FetchLandmarks.ViewModel?
+    var displaySomethingArguments: LandmarksDataFlow.FetchLandmarks.ViewModel?
 
-    func displayItems(viewModel: Landmarks.FetchLandmarks.ViewModel) {
+    func displayItems(viewModel: LandmarksDataFlow.FetchLandmarks.ViewModel) {
         displaySomethingWasCalled += 1
         displaySomethingArguments = viewModel
     }

@@ -6,23 +6,25 @@
 import UIKit
 
 protocol LandmarksPresentationLogic {
-    func presentSomething(response: Landmarks.FetchLandmarks.Response)
+    func presentLandmarks(response: LandmarksDataFlow.FetchLandmarks.Response)
 }
 
-/// Responds for displaying data in module Places
+/// Responds for displaying data in module Landmarks
 class LandmarksPresenter: LandmarksPresentationLogic {
     weak var viewController: LandmarksDisplayLogic?
     
-    // MARK: Do something
-    func presentSomething(response: Landmarks.FetchLandmarks.Response) {
-        var viewModel: Landmarks.FetchLandmarks.ViewModel
+    private let errorMessage = "Error loading data"
+    
+    // MARK: - Present Landmarks
+    func presentLandmarks(response: LandmarksDataFlow.FetchLandmarks.Response) {
+        var viewModel: LandmarksDataFlow.FetchLandmarks.ViewModel
         
         switch response.result {
-        case let .failure(error):
-            viewModel = Landmarks.FetchLandmarks.ViewModel(state: .error(message: error.localizedDescription))
+        case .failure:
+            viewModel = LandmarksDataFlow.FetchLandmarks.ViewModel(state: .error(message: errorMessage))
         case let .success(result):
             if result.isEmpty {
-                viewModel = Landmarks.FetchLandmarks.ViewModel(state: .emptyResult)
+                viewModel = LandmarksDataFlow.FetchLandmarks.ViewModel(state: .emptyResult)
             } else {
                 let data = result.map {
                     LandmarksViewModel(
@@ -32,7 +34,7 @@ class LandmarksPresenter: LandmarksPresentationLogic {
                         isFavorite: $0.isFavorite
                     )
                 }
-                viewModel = Landmarks.FetchLandmarks.ViewModel(state: .result(data))
+                viewModel = LandmarksDataFlow.FetchLandmarks.ViewModel(state: .result(data))
             }
         }
         

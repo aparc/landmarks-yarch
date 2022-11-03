@@ -4,5 +4,10 @@
 
 
 class LandmarksDataStore {
+    
+    static let shared = LandmarksDataStore()
+    
     var models: [LandmarkModel]?
+    
+    private init() {}
 }

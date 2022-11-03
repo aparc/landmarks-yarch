@@ -6,33 +6,34 @@
 import UIKit
 
 protocol LandmarksDisplayLogic: AnyObject {
-    func displayItems(viewModel: Landmarks.FetchLandmarks.ViewModel)
+    func displayItems(viewModel: LandmarksDataFlow.FetchLandmarks.ViewModel)
 }
 
 protocol LandmarksViewControllerDelegate: AnyObject {
-    func openPlaceDetails(with: Int)
-    func showFavorites(_ on: Bool)
+    func openLandmarkDetails(with: Int)
 }
 
 class LandmarksViewController: UIViewController {
     
     // MARK: - Private Properties
-    private let interactor: LandmarksBusinessLogic
-    private var state: Landmarks.ViewControllerState
+    let interactor: LandmarksBusinessLogic
+    private var state: LandmarksDataFlow.ViewControllerState
     
-    private let placesTableDataSource: LandmarksTableDataSource = LandmarksTableDataSource()
-    private let placesTableDelegate: LandmarksTableDelegate = LandmarksTableDelegate()
+    private let landmarksTableDataSource: LandmarksTableDataSource = LandmarksTableDataSource()
+    private let landmarksTableDelegate: LandmarksTableDelegate = LandmarksTableDelegate()
     
-    private lazy var placesView = view as? LandmarksView
+    private lazy var landmarksView = view as? LandmarksView
     
-    // MARK: - Initializators
+    // MARK: - Init Methods
     init(
         interactor: LandmarksBusinessLogic,
-        initialState: Landmarks.ViewControllerState = .loading
+        initialState: LandmarksDataFlow.ViewControllerState = .loading(onlyFavorites: false)
     ) {
         self.interactor = interactor
         self.state = initialState
         super.init(nibName: nil, bundle: nil)
+        
+        landmarksTableDelegate.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -44,8 +45,9 @@ class LandmarksViewController: UIViewController {
         super.loadView()
         let view = LandmarksView(
             frame: UIScreen.main.bounds,
-            tableDataSource: placesTableDataSource,
-            tableDelegate: placesTableDelegate
+            tableDataSource: landmarksTableDataSource,
+            tableDelegate: landmarksTableDelegate,
+            favoriteSwitcherdelegate: self
         )
         self.view = view
     }
@@ -60,12 +62,12 @@ class LandmarksViewController: UIViewController {
         display(newState: state)
     }
     
-    // MARK: Fetching
-    private func fetchItems(request: Landmarks.FetchLandmarks.Request = .init()) {
-//        let request = Places.FetchPlaces.Request()
+    // MARK: - Public Methods
+    func fetchItems(request: LandmarksDataFlow.FetchLandmarks.Request = .init()) {
         interactor.fetchLandmarks(request: request)
     }
     
+    // MARK: - Private Methods
     private func setupNavBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Landmarks"
@@ -75,25 +77,26 @@ class LandmarksViewController: UIViewController {
 // MARK: - PlacesDisplayLogic
 extension LandmarksViewController: LandmarksDisplayLogic {
     
-    func displayItems(viewModel: Landmarks.FetchLandmarks.ViewModel) {
+    func displayItems(viewModel: LandmarksDataFlow.FetchLandmarks.ViewModel) {
         display(newState: viewModel.state)
     }
     
-    private func display(newState: Landmarks.ViewControllerState) {
+    private func display(newState: LandmarksDataFlow.ViewControllerState) {
         state = newState
         switch state {
-        case .loading:
-            fetchItems()
+        case let .loading(onlyFavorites):
+            landmarksView?.showLoading()
+            fetchItems(request: .init(onlyFavorites: onlyFavorites))
         case let .error(message):
-            print("error \(message)")
+            landmarksView?.showError(message: message)
         case let .result(items):
-            placesTableDataSource.delegate = self
-            placesTableDelegate.delegate = self
-            placesTableDataSource.representableViewModels = items
-            placesTableDelegate.representableViewModels = items
-            placesView?.updateTableData(dataSource: placesTableDataSource, delegate: placesTableDelegate)
+            landmarksTableDataSource.representableViewModels = items
+            landmarksTableDelegate.representableViewModels = items
+            landmarksView?.updateTableData()
         case .emptyResult:
-            print("empty result")
+            landmarksTableDataSource.representableViewModels = []
+            landmarksTableDelegate.representableViewModels = []
+            landmarksView?.showEmptyView()
         }
     }
     
@@ -101,13 +104,22 @@ extension LandmarksViewController: LandmarksDisplayLogic {
 
 // MARK: - LandmarksViewControllerDelegate
 extension LandmarksViewController: LandmarksViewControllerDelegate {
-    func openPlaceDetails(with id: Int) {
-        let detailsController = LandmarkDetailsBuilder().build()
+    func openLandmarkDetails(with id: Int) {
+        let detailsController = LandmarkDetailsBuilder().set(initialState: .initial(landmarkId: id)).build()
         navigationController?.pushViewController(detailsController, animated: true)
     }
-    
+}
+
+// MARK: - LandmarksFavoriteSwitcherDelegate
+extension LandmarksViewController: LandmarksFavoriteSwitcherDelegate {
     func showFavorites(_ on: Bool) {
-        fetchItems(request: .init(onlyFavorites: on))
+        display(newState: .loading(onlyFavorites: on))
     }
-    
+}
+
+// MARK: - LandmarksErrorViewDelegate
+extension LandmarksViewController: LandmarksErrorViewDelegate {
+    func reloadButtonWasTapped() {
+        display(newState: .loading(onlyFavorites: false))
+    }
 }

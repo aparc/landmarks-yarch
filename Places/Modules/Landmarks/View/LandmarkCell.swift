@@ -21,7 +21,7 @@ extension LandmarkCell {
 class LandmarkCell: UITableViewCell {
     
     // MARK: - Public Properties
-    static let reuseIdentifier = "placeCell"
+    static let reuseIdentifier = "landmarkCell"
     
     var appearance: Appearance = Appearance()
     
@@ -34,7 +34,7 @@ class LandmarkCell: UITableViewCell {
         return label
     }()
     
-    private lazy var avatar: UIImageView = {
+    private lazy var landmarkImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.layer.masksToBounds = true
@@ -55,7 +55,7 @@ class LandmarkCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        avatar.layer.cornerRadius = avatar.frame.height / 2
+        landmarkImageView.layer.cornerRadius = landmarkImageView.frame.height / 2
     }
     
     // MARK: - Inits
@@ -73,25 +73,25 @@ class LandmarkCell: UITableViewCell {
     // MARK: - Public Methods
     func configure(with cellPresentable: LandmarksViewModel) {
         label.text = cellPresentable.name
-        avatar.image = UIImage(named: cellPresentable.imageName)
+        landmarkImageView.image = UIImage(named: cellPresentable.imageName)
         favouriteIcon.isHidden = !cellPresentable.isFavorite
     }
     
     // MARK: - Private Methods
     private func setupViews() {
         contentView.addSubview(label)
-        contentView.addSubview(avatar)
+        contentView.addSubview(landmarkImageView)
         contentView.addSubview(favouriteIcon)
     }
 
     private func addConstraints() {
-        avatar.snp.makeConstraints { make in
+        landmarkImageView.snp.makeConstraints { make in
             make.top.bottom.left.equalToSuperview().inset(appearance.landmarkImageEdgeInsets)
-            make.width.equalTo(avatar.snp.height)
+            make.width.equalTo(landmarkImageView.snp.height)
         }
         
         label.snp.makeConstraints { make in
-            make.left.equalTo(avatar.snp.right).offset(appearance.labelLeftOffset)
+            make.left.equalTo(landmarkImageView.snp.right).offset(appearance.labelLeftOffset)
             make.top.bottom.equalToSuperview()
         }
         

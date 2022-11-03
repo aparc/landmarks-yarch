@@ -11,19 +11,19 @@ import Nimble
 
 @testable import Places
 
-class PlacesInteractorTests: QuickSpec {
+class LandmarksInteractorTests: QuickSpec {
     override func spec() {
         var interactor: LandmarksInteractor!
-        var presenterMock: PlacesPresenterMock!
-        var providerMock: PlacesProviderMock!
+        var presenterMock: LandmarksPresenterMock!
+        var providerMock: LandmarksProviderMock!
         
         beforeEach {
-            providerMock = PlacesProviderMock()
-            presenterMock = PlacesPresenterMock()
+            providerMock = LandmarksProviderMock()
+            presenterMock = LandmarksPresenterMock()
             interactor = LandmarksInteractor(presenter: presenterMock, provider: providerMock)
         }
         
-        describe(".doSomething") {
+        describe(".fetchLandmarks") {
             it("should get data from provider") {
                 // when
                 interactor.fetchLandmarks(request: TestData.request)
@@ -60,17 +60,17 @@ class PlacesInteractorTests: QuickSpec {
     }
 }
 
-extension PlacesInteractorTests {
+extension LandmarksInteractorTests {
     enum TestData {
-        static let request = Landmarks.FetchLandmarks.Request()
-        static let models = PlacesModelTests.TestData.entitiesCollection()
+        static let request = LandmarksDataFlow.FetchLandmarks.Request()
+        static let models = LandmarkModelTests.TestData.entitiesCollection()
         
         fileprivate static let underlyingError = ErrorMock()
         fileprivate static let getItemsFailedError = LandmarksProviderError.getItemsFailed(underlyingError: underlyingError)
     }
 }
 
-fileprivate class PlacesProviderMock: LandmarksProviderProtocol {
+fileprivate class LandmarksProviderMock: LandmarksProviderProtocol {
     var getItemsWasCalled: Int = 0
     var getItemsArguments: (([LandmarkModel]?, LandmarksProviderError?) -> Void)?
     var getItemsCompletionStub: (result: [LandmarkModel]?, error: LandmarksProviderError?) = (nil, nil)
@@ -82,11 +82,11 @@ fileprivate class PlacesProviderMock: LandmarksProviderProtocol {
     }
 }
 
-fileprivate class PlacesPresenterMock: LandmarksPresentationLogic {
+fileprivate class LandmarksPresenterMock: LandmarksPresentationLogic {
     var presentSomethingWasCalled: Int = 0
-    var presentSomethingArguments: Landmarks.FetchLandmarks.Response?
+    var presentSomethingArguments: LandmarksDataFlow.FetchLandmarks.Response?
     
-    func presentSomething(response: Landmarks.FetchLandmarks.Response) {
+    func presentLandmarks(response: LandmarksDataFlow.FetchLandmarks.Response) {
         presentSomethingWasCalled += 1
         presentSomethingArguments = response
     }

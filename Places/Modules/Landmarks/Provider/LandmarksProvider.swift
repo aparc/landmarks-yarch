@@ -14,8 +14,8 @@ class LandmarksProvider: LandmarksProviderProtocol {
     let dataStore: LandmarksDataStore
     let service: LandmarksServiceProtocol
 
-    init(dataStore: LandmarksDataStore = LandmarksDataStore(), service: LandmarksServiceProtocol = LandmarksService()) {
-        self.dataStore = dataStore
+    init(service: LandmarksServiceProtocol = LandmarksService()) {
+        self.dataStore = LandmarksDataStore.shared
         self.service = service
     }
 

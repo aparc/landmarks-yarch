@@ -4,7 +4,7 @@
 //
 
 protocol LandmarksBusinessLogic {
-    func fetchLandmarks(request: Landmarks.FetchLandmarks.Request)
+    func fetchLandmarks(request: LandmarksDataFlow.FetchLandmarks.Request)
 }
 
 class LandmarksInteractor: LandmarksBusinessLogic {
@@ -16,9 +16,9 @@ class LandmarksInteractor: LandmarksBusinessLogic {
         self.provider = provider
     }
     
-    func fetchLandmarks(request: Landmarks.FetchLandmarks.Request) {
+    func fetchLandmarks(request: LandmarksDataFlow.FetchLandmarks.Request) {
         provider.fetchItems { (items, error) in
-            let result: Landmarks.LandmarksRequestResult
+            let result: LandmarksDataFlow.LandmarksRequestResult
             if let items = items {
                 let landmarks = request.onlyFavorites
                 ? items.filter { $0.isFavorite }
@@ -30,7 +30,7 @@ class LandmarksInteractor: LandmarksBusinessLogic {
             } else {
                 result = .failure(.someError(message: "No Data"))
             }
-            self.presenter.presentSomething(response: Landmarks.FetchLandmarks.Response(result: result))
+            self.presenter.presentLandmarks(response: LandmarksDataFlow.FetchLandmarks.Response(result: result))
         }
     }
 }
