@@ -47,12 +47,15 @@ class LandmarksView: UIView {
         frame: CGRect = CGRect.zero,
         tableDataSource: UITableViewDataSource,
         tableDelegate: UITableViewDelegate,
-        favoriteSwitcherdelegate: LandmarksFavoriteSwitcherDelegate
+        favoriteSwitcherdelegate: LandmarksFavoriteSwitcherDelegate,
+        errorViewDelegate: LandmarksErrorViewDelegate? = nil
     ) {
         tableView = UITableView()
         super.init(frame: frame)
         
         landmarkSwitcherView.delegate = favoriteSwitcherdelegate
+        errorView.delegate = errorViewDelegate
+        
         configureTableView(dataSource: tableDataSource, delegate: tableDelegate)
         addSubviews()
         makeConstraints()

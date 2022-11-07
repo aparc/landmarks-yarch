@@ -77,8 +77,7 @@ class LandmarksEmptyView: UIView {
         }
         
         title.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview()
+            make.left.top.right.equalToSuperview()
         }
         
         subtitle.snp.makeConstraints { make in

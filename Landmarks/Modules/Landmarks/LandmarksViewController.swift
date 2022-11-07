@@ -49,7 +49,8 @@ class LandmarksViewController: UIViewController {
             frame: UIScreen.main.bounds,
             tableDataSource: landmarksTableDataSource,
             tableDelegate: landmarksTableDelegate,
-            favoriteSwitcherdelegate: self
+            favoriteSwitcherdelegate: self,
+            errorViewDelegate: self
         )
         self.view = view
     }
