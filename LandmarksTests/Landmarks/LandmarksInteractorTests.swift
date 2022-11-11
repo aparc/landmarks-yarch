@@ -28,31 +28,31 @@ class LandmarksInteractorTests: QuickSpec {
                 // when
                 interactor.fetchLandmarks(request: TestData.request)
                 // then
-                await expect(providerMock.getItemsWasCalled).to(equal(1))
+                expect(providerMock.getItemsWasCalled).to(equal(1))
             }
             
-            context("getItems successfull"){
-                it("should prepare success response and call presenter"){
+            context("getItems successfull") {
+                it("should prepare success response and call presenter") {
                     // given
                     providerMock.getItemsCompletionStub = (result: TestData.models, error: nil)
                     // when
                     interactor.fetchLandmarks(request: TestData.request)
                     // then
-                    await expect(presenterMock.presentSomethingWasCalled).to(equal(1))
-                    await expect(presenterMock.presentSomethingArguments).toNot(beNil())
+                    expect(presenterMock.presentSomethingWasCalled).to(equal(1))
+                    expect(presenterMock.presentSomethingArguments).toNot(beNil())
                     expect{ if case .success(_)? = presenterMock.presentSomethingArguments?.result { return true }; return false }.to(beTrue())
                 }
             }
             
-            context("getItems failed"){
-                it("should prepare failed response and call presenter"){
+            context("getItems failed") {
+                it("should prepare failed response and call presenter") {
                     // given
                     providerMock.getItemsCompletionStub = (result: nil, error: TestData.getItemsFailedError)
                     // when
                     interactor.fetchLandmarks(request: TestData.request)
                     // then
-                    await expect(presenterMock.presentSomethingWasCalled).to(equal(1))
-                    await expect(presenterMock.presentSomethingArguments).toNot(beNil())
+                    expect(presenterMock.presentSomethingWasCalled).to(equal(1))
+                    expect(presenterMock.presentSomethingArguments).toNot(beNil())
                     expect{ if case .failure(_)? = presenterMock.presentSomethingArguments?.result { return true }; return false }.to(beTrue())
                 }
             }

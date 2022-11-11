@@ -16,21 +16,21 @@ class LandmarkDetailsInteractorTests: QuickSpec {
         var interactor: LandmarkDetailsInteractor!
         var presenterMock: LandmarkDetailsPresenterMock!
         var providerMock: LandmarkDetailsProviderMock!
-
+        
         beforeEach {
             providerMock = LandmarkDetailsProviderMock()
             presenterMock = LandmarkDetailsPresenterMock()
             interactor = LandmarkDetailsInteractor(presenter: presenterMock, provider: providerMock)
         }
-
+        
         describe(".getLandmarkDetails") {
             it("should get data from provider") {
                 // when
                 interactor.getLandmarkDetails(request: TestData.request)
                 // then
-                await expect(providerMock.getItemsWasCalled).to(equal(1))
+                expect(providerMock.getItemsWasCalled).to(equal(1))
             }
-
+            
             context("getItems successfull"){
                 it("should prepare success response and call presenter"){
                     // given
@@ -38,12 +38,14 @@ class LandmarkDetailsInteractorTests: QuickSpec {
                     // when
                     interactor.getLandmarkDetails(request: TestData.request)
                     // then
-                    await expect(presenterMock.presentSomethingWasCalled).to(equal(1))
-                    await expect(presenterMock.presentSomethingArguments).toNot(beNil())
-                    expect { if case .success(_)? = presenterMock.presentSomethingArguments?.result { return true }; return false }.to(beTrue())
+                    expect(presenterMock.presentSomethingWasCalled).to(equal(1))
+                    expect(presenterMock.presentSomethingArguments).toNot(beNil())
+                    expect {
+                        if case .success(_)? = presenterMock.presentSomethingArguments?.result { return true }; return false
+                    }.to(beTrue())
                 }
             }
-
+            
             context("getItems failed"){
                 it("should prepare failed response and call presenter"){
                     // given
@@ -51,8 +53,8 @@ class LandmarkDetailsInteractorTests: QuickSpec {
                     // when
                     interactor.getLandmarkDetails(request: TestData.request)
                     // then
-                    await expect(presenterMock.presentSomethingWasCalled).to(equal(1))
-                    await expect(presenterMock.presentSomethingArguments).toNot(beNil())
+                    expect(presenterMock.presentSomethingWasCalled).to(equal(1))
+                    expect(presenterMock.presentSomethingArguments).toNot(beNil())
                     expect{ if case .failure(_)? = presenterMock.presentSomethingArguments?.result { return true }; return false }.to(beTrue())
                 }
             }
@@ -64,7 +66,7 @@ extension LandmarkDetailsInteractorTests {
     enum TestData {
         static let request = LandmarkDetailsDataFlow.FetchLandmarkDetails.Request(id: 1)
         static let model = LandmarkDetailsModelTests.TestData.model
-
+        
         fileprivate static let underlyingError = ErrorMock()
     }
 }
@@ -79,13 +81,13 @@ fileprivate class LandmarkDetailsProviderMock: LandmarkDetailsProviderProtocol {
     var getItemsWasCalled: Int = 0
     var getItemsArguments: ((LandmarkDetailsModel?) -> Void)?
     var getItemsCompletionStub: (LandmarkDetailsModel?) = (nil)
-
+    
 }
 
 fileprivate class LandmarkDetailsPresenterMock: LandmarkDetailsPresentationLogic {
     var presentSomethingWasCalled: Int = 0
     var presentSomethingArguments: LandmarkDetailsDataFlow.FetchLandmarkDetails.Response?
-
+    
     func presentLandmarkDetails(response: LandmarkDetailsDataFlow.FetchLandmarkDetails.Response) {
         presentSomethingWasCalled += 1
         presentSomethingArguments = response
